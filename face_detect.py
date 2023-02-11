@@ -37,7 +37,6 @@ def getDataFromCamera(func):
       for faceRect in faceRects:
         # face position
         x, y, w, h = faceRect
-
         # divided the frame into mini frame only include face
         face_img = frame_gray[y - 10: y + h + 10, x - 10: x + w + 10]
         cv2.imshow("img", face_img)
@@ -48,8 +47,10 @@ def getDataFromCamera(func):
 
         img_test = cv2.resize(constant, (IMAGE_SIZE, IMAGE_SIZE))
 
-        func(img_test)
-
+        func(img_test, frame, faceRect)
+    else:
+      cv2.imshow("find me", frame)
+    
     cv2.waitKey(10)
 
 
