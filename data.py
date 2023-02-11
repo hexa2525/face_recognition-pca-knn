@@ -5,25 +5,27 @@ import os
 IMAGE_SIZE = 224
 HOME = os.environ["HOME"]
 numberOfImages = 300
-numberOfPersons = 3
 
-def initialize_img():
-  input_path = f"{HOME}/train"
-  output_path = f"{HOME}/train/224x224"
-  for j in range(1, numberOfPersons+1):
-    for number in range(numberOfImages):
-        input_img_path = f"{input_path}/s{3}/{number}.jpg"
-        # change to gray scale
-        image = Image.open(input_img_path).convert('L')
-        image = image.resize((IMAGE_SIZE, IMAGE_SIZE), Image.LANCZOS)
-        image.save(f"{output_path}/s{j}/{number}.jpg")
+# def initialize_img():
+#   input_path = f"{HOME}/train"
+#   output_path = f"{HOME}/train/224x224"
+#   for j in range(1, numberOfPersons+1):
+#     for number in range(numberOfImages):
+#         input_img_path = f"{input_path}/s{3}/{number}.jpg"
+#         # change to gray scale
+#         image = Image.open(input_img_path).convert('L')
+#         print(image.filename)
+#         image = image.resize((IMAGE_SIZE, IMAGE_SIZE), Image.LANCZOS)
+#         image.save(f"{output_path}/s{j}/{number}.jpg")
 
 
 def LoadData():
     data = []
     label = [] # [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+    input_path = os.path.join(HOME, "train", str(IMAGE_SIZE))
+    numberOfPersons = len(os.listdir(input_path))
+
     for j in range(1, numberOfPersons+1):
-        input_path = f"{HOME}/train/224x224"
         for number in range(numberOfImages):
             input_img_path = f"{input_path}/s{j}/{number}.jpg"
             img = Image.open(input_img_path)
@@ -72,5 +74,5 @@ def LoadData():
     return np.matrix(data), np.matrix(label).T
 
 
-if __name__ == '__main__':
-    initialize_img()
+# if __name__ == '__main__':
+    # initialize_img()
