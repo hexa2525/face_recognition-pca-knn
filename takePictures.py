@@ -1,60 +1,54 @@
-import cv2
 import os
-import time
+import sys
 from PIL import Image
+from face_detect import getDataFromCamera
+import shutil
+import customtkinter
+
+
+customtkinter.set_appearance_mode("dark")  # Modes: "System" (standard), "Dark", "Light"
+customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
+
+app = customtkinter.CTk()
+app.geometry("400x780")
+app.title("CustomTkinter simple_example.py")
+app.mainloop()
+
 
 count = 1
 IMAGE_SIZE = 224
-cap = cv2.VideoCapture(0)
-cascade_path = "haarcascade_frontalface_alt.xml"
-cascade = cv2.CascadeClassifier(cascade_path)
+home = os.environ["HOME"]    
+name = "yezarniko"
+number_of_images_you_want = 300
+train_dir = os.path.join(home, "train")
+train_data_path = os.path.join(train_dir, name)
 
-def save_img(img_frame):
-    home = os.environ["HOME"]    
-    path = os.path.join(home, "train/s8c")
+
+if not os.path.exists(train_dir):
+    os.mkdir(train_dir)
+
+if not os.path.exists(train_data_path):
+    os.mkdir(train_data_path)
+else:
+    resp = input("Do you want to overwrite: ")
+    if(resp == 'y'):
+        shutil.rmtree(train_data_path)
+        os.mkdir(train_data_path)
+
+
+def save_img(img_frame, file_name):
+    global count
     img = Image.fromarray(img_frame)    
-    img.save(f"{path}/{count}.jpg")
+    img.save(f"{train_data_path}/{file_name}.jpg")
     print(count)
 
-while True:
-  _, frame = cap.read()
 
-  # convert webcam into gray
-  frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+def takePics(img_test):
+    global count
+    save_img(img_test, count)
+    if count == number_of_images_you_want:
+        sys.exit()
+    count += 1
 
-  faceRects = cascade.detectMultiScale(frame_gray, scaleFactor = 1.2, minNeighbors = 1, minSize = (32, 32))
 
-  if len(faceRects) > 0:
-    for faceRect in faceRects:
-      # face position
-      x, y, w, h = faceRect
-      # divided the frame into mini frame only include face
-      face_img = frame_gray[y - 10: y + h + 10, x - 10: x + w + 10]
-
-      top, bottom, left, right = (0, 0, 0, 0)
-      h, w = face_img.shape
-      longest_edge = max(h, w)
-
-      # if high and width doesn't equal, run this if statement
-      if h < longest_edge:
-          dh = longest_edge - h
-          top = dh // 2
-          bottom = dh - top
-      elif w < longest_edge:
-          dw = longest_edge - w
-          left = dw // 2
-          right = dw - left
-      else:
-          pass
-
-      BLACK = [0]
-
-      constant = cv2.copyMakeBorder(face_img, top, bottom, left, right, cv2.BORDER_CONSTANT, value=BLACK)
-      img_test = cv2.resize(constant, (IMAGE_SIZE, IMAGE_SIZE))
-      cv2.imshow("result", img_test)
-      save_img(img_test)
-      count+=1
-
-  cv2.imshow("find me", frame_gray)
-  cv2.waitKey(10)
-
+# getDataFromCamera(takePics)
