@@ -4,11 +4,12 @@ import os
 
 IMAGE_SIZE = 224
 HOME = os.environ["HOME"]
+current_dir = os.getcwd()
 numberOfImages = 300
 
 # def initialize_img():
-#   input_path = f"{HOME}/train"
-#   output_path = f"{HOME}/train/224x224"
+#   input_path = f"{current_dir}/train"
+#   output_path = f"{current_dir}/train/224x224"
 #   for j in range(1, numberOfPersons+1):
 #     for number in range(numberOfImages):
 #         input_img_path = f"{input_path}/s{3}/{number}.jpg"
@@ -22,7 +23,7 @@ numberOfImages = 300
 def LoadData():
     data = []
     label = [] # [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
-    input_path = os.path.join(HOME, "train", str(IMAGE_SIZE))
+    input_path = os.path.join(current_dir, "train", str(IMAGE_SIZE))
     numberOfPersons = len(os.listdir(input_path))
 
     for j in range(1, numberOfPersons+1):
