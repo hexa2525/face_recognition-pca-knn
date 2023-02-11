@@ -17,10 +17,10 @@ import customtkinter
 
 count = 1
 IMAGE_SIZE = 224
-home = os.environ["HOME"]    
+current_dir = os.getcwd()
 name = "yezarniko"
 number_of_images_you_want = 300
-train_dir = os.path.join(home, "train")
+train_dir = os.path.join(current_dir, "train")
 train_dir_IMAGE_SIZE = os.path.join(train_dir, str(IMAGE_SIZE))
 personID = len(os.listdir(train_dir_IMAGE_SIZE)) + 1
 train_data_path = os.path.join(train_dir_IMAGE_SIZE, f"s{personID}")
