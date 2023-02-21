@@ -46,7 +46,7 @@ def getDataFromCamera(func):
 
         img_test = cv2.resize(constant, (IMAGE_SIZE, IMAGE_SIZE))
 
-        func(img_test, frame, faceRect)
+        func(img_test, frame, faceRect, cap)
     else:
       pass
     

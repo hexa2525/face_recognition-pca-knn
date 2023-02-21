@@ -1,11 +1,12 @@
 import customtkinter
 from PIL import Image
+from menu import Menu
 
 customtkinter.set_appearance_mode("Light")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("green")  # Themes: "blue" (standard), "green", "dark-blue"
 
 
-class App(customtkinter.CTk):
+class Welcome(customtkinter.CTk):
   
   def __init__(self):
     super().__init__()
@@ -23,13 +24,20 @@ class App(customtkinter.CTk):
     bgImg = customtkinter.CTkImage(light_image=bgImg, size=(window_width,window_height))
     label1 = customtkinter.CTkLabel(self, text="", image=bgImg)
     label1.pack()
+
+
+  def buttonCallback(self, new_window):
+    self.withdraw()
+    new_window.deiconify()
+    new_window.grab_set()
     
-    button = customtkinter.CTkButton(master=self, width=100, text="Continue", fg_color="#ffffff", text_color="#4D339E", border_color="#4D339E",
-    border_width=2, hover="disable", corner_radius=50)
-    button.place(x=200, y=320)
 
 
-
-
-app = App()
-app.mainloop()
+welcome = Welcome()
+menu = Menu(welcome)
+button = customtkinter.CTkButton(master=welcome, width=100, text="Continue", fg_color="#ffffff", text_color="#4D339E", border_color="#4D339E",
+border_width=2, hover="disable", corner_radius=50,
+command=lambda: welcome.buttonCallback(menu)
+)
+button.place(x=200, y=320)
+welcome.mainloop()
