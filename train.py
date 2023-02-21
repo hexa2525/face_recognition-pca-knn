@@ -12,17 +12,6 @@ import customtkinter
 class TD(customtkinter.CTkToplevel):
   
   def __init__(self, root):
-    """"
-    Original Data Set
-    224*224 = 50176 values in one image
-
-    [168 150 137 ... 227 243 248]
-    """
-    self.Data, self.Label = LoadData()
-    self.Data = np.asarray(self.Data)
-    self.Label = np.asarray(self.Label)
-
-
 
     super().__init__()
     window_height = 500
@@ -68,12 +57,41 @@ class TD(customtkinter.CTkToplevel):
     trainButton = customtkinter.CTkButton(master=self, text="Train", **button_properties,
     command=trainButtonCallback)
 
+    def saveButtonCallback():
+      self.save_train_data()
+      self.saveButton.pack_forget()
+      textbox.insert("end","\nsaved!")
+      textbox.yview("end")
+      recognizeButton.pack()
+
+    self.saveButton = customtkinter.CTkButton(master=self, text="save", **button_properties,
+    command=saveButtonCallback)
+
+
+    def recognizeButtonCallback(page):
+      self.root.destroy()
+      __import__(page)
+
+    recognizeButton = customtkinter.CTkButton(master=self, text="Face Recoginze", **button_properties,
+    command=lambda: recognizeButtonCallback("test"))
+
     textbox.pack(pady=20)
     trainButton.pack()
 
     # td.save_train_data()
 
   def train(self, textbox):
+
+    """"
+    Original Data Set
+    224*224 = 50176 values in one image
+
+    [168 150 137 ... 227 243 248]
+    """
+    self.Data, self.Label = LoadData()
+    self.Data = np.asarray(self.Data)
+    self.Label = np.asarray(self.Label)
+
     output = ""
 
     print(f"number of images: {len(self.Data)}")
@@ -98,6 +116,8 @@ class TD(customtkinter.CTkToplevel):
     textbox.insert("end", f"number of values in one image: {len(self.trainDataS[0])}\n")
     textbox.insert("end","\nfinished")
     textbox.yview("end")
+    self.saveButton.pack()
+    # self.save_train_data()
     """
     PCA Transform
     0.9 -> 10 values in one image

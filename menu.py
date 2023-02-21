@@ -10,6 +10,7 @@ customtkinter.set_default_color_theme("green")  # Themes: "blue" (standard), "gr
 class Menu(customtkinter.CTkToplevel):
   
   def __init__(self, root):
+    self.root = root
     super().__init__(root)
     self.title("Welcome")
     self.configure(fg_color="#ffffff")
@@ -79,5 +80,5 @@ class Menu(customtkinter.CTkToplevel):
     new_window.grab_set()
   
   def buttonCallback(self, page):
-    self.destroy()
+    self.root.destroy()
     __import__(page)

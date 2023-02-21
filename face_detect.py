@@ -51,8 +51,13 @@ def getDataFromCamera(func):
       pass
     
     cv2.imshow("find me", frame)
-    cv2.waitKey(10)
+    k = cv2.waitKey(10)
 
+    if k & 0xFF == ord('q'):
+        break
+
+  cap.release()
+  cv2.destroyAllWindows()
 
 
 def adjustImageSize(face_img):
