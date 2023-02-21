@@ -35,7 +35,7 @@ with open("trainDataS.pkl", "rb") as trainDataS_file:
     trainDataS = pk.load(trainDataS_file)
 
 
-def test(img_test, frame, faceRect):
+def test(img_test, frame, faceRect,_):
     img_test = np.reshape(img_test, (1, IMAGE_SIZE * IMAGE_SIZE))
     testDataS = pca.transform(img_test)
 

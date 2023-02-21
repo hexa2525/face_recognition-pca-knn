@@ -10,46 +10,71 @@ import cv2
 customtkinter.set_appearance_mode("light")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
-app = customtkinter.CTk()
-app.geometry("300x300")
-app.configure(fg_color="#ffffff")
-app.resizable(False, False)  # This code helps to disable windows from resizing
-app.title("CustomTkinter simple_example.py")
+# app = customtkinter.CTk()
 
-button_properties = {
-    "fg_color": "#ffffff",
-    "text_color": "#4D339E",
-    "border_color": "#4D339E",
-    "border_width": 2,
-    "hover": "disable",
-    "corner_radius": 5,
-    "width": 200,
-    "font": ("Poppins",18)
+class TakePictures(customtkinter.CTkToplevel):
+    def __init__(self, root):
+        super().__init__()
+        self.root = root
+        self.geometry("300x340")
+        self.configure(fg_color="#ffffff")
+        self.resizable(False, False)  # This code helps to disable windows from resizing
+        self.title("Take Picture")
+        self.withdraw()
+        self.protocol("WM_DELETE_WINDOW", lambda: self.root.destroy())
+        button_properties = {
+            "fg_color": "#ffffff",
+            "text_color": "#4D339E",
+            "border_color": "#4D339E",
+            "border_width": 2,
+            "hover": "disable",
+            "corner_radius": 5,
+            "width": 20,
 
-}
+        }
 
-takePictureButton = customtkinter.CTkButton(master=app, text="Take Picture", **button_properties,
-command=(lambda: getDataFromCamera(takePics))
-)
-takePictureButton.pack(pady=10)
+        t1 = threading.Thread(target=lambda:getDataFromCamera(self.takePics) )
 
-textbox = customtkinter.CTkTextbox(app,activate_scrollbars=False, 
-    text_color="#ffffff", fg_color="#484040"
-)
-textbox.insert("0.0", "0\n")  
-textbox.pack()
+        def takePictureButtonCallback():
+            t1.start()
+            takePictureButton.pack_forget()
 
 
-count = 0
-IMAGE_SIZE = 224
-current_dir = os.getcwd()
-name = "yezarniko"
-number_of_images_you_want = 300
-train_dir = os.path.join(current_dir, "train")
-train_dir_IMAGE_SIZE = os.path.join(train_dir, str(IMAGE_SIZE))
-personID = len(os.listdir(train_dir_IMAGE_SIZE)) + 1
-train_data_path = os.path.join(train_dir_IMAGE_SIZE, f"s{personID}")
-color = (0, 255, 0)
+        takePictureButton = customtkinter.CTkButton(master=self, text="Take Picture", **button_properties,
+        font=("Poppins",18),
+        command=takePictureButtonCallback)
+
+        self.textbox = customtkinter.CTkTextbox(self,activate_scrollbars=False, 
+            text_color="#ffffff", fg_color="#484040")
+
+        self.textbox.insert("0.0", "0\n")  
+        self.textbox.pack(pady=20)
+
+        entry_frame = customtkinter.CTkFrame(master=self)
+        entry_frame.pack(pady=10)
+
+        entry_1 = customtkinter.CTkEntry(master=entry_frame, placeholder_text="Enter your name",
+        corner_radius=0
+        )
+        entry_1.grid(row=1,column=1)
+
+
+        okButton = customtkinter.CTkButton(master=entry_frame, text="ok",width=20,corner_radius=0,
+        command=takePictureButtonCallback)
+        okButton.grid(row=1,column=2)
+
+        takePictureButton.pack()
+
+
+        self.count = 0
+        IMAGE_SIZE = 224
+        current_dir = os.getcwd()
+        name = "yezarniko"
+        self.number_of_images_you_want = 30
+        train_dir = os.path.join(current_dir, "train")
+        train_dir_IMAGE_SIZE = os.path.join(train_dir, str(IMAGE_SIZE))
+        personID = len(os.listdir(train_dir_IMAGE_SIZE)) + 1
+        train_data_path = os.path.join(train_dir_IMAGE_SIZE, f"s{personID}")
 
 
 # if not os.path.exists(train_dir):
@@ -67,31 +92,30 @@ color = (0, 255, 0)
 #     else:
 #         sys.exit()
 
-def save_img(img_frame, file_name):
-    global count
-    img = Image.fromarray(img_frame)    
-    img.save(f"{train_data_path}/{file_name}.jpg")
-    print(count)
+    def save_img(self, img_frame, file_name):
+        img = Image.fromarray(img_frame)    
+        img.save(f"{train_data_path}/{file_name}.jpg")
+        print(self.count)
 
 
-def takePics(img_test, frame, faceRect):
-    global count,textbox
-    x, y, w, h = faceRect
-    cv2.rectangle(frame, (x - 10, y - 10), (x + w + 10, y + h + 10), color, thickness = 2)
-    # save_img(img_test, count)
-    if count == 0:
-        pass
-    else:
-        print(textbox)
-        textbox.insert("end", f"{count}\n")
-        textbox.pack()
-        # print(count)
-    if count == number_of_images_you_want:
-        sys.exit()
-    count += 1
+    def takePics(self, img_test, frame, faceRect, cap):
+        x, y, w, h = faceRect
+        color = (0, 255, 0)
+        cv2.rectangle(frame, (x - 10, y - 10), (x + w + 10, y + h + 10), color, thickness = 2)
+        # self.save_img(img_test, count)
+        if self.count == 0:
+            pass
+        else:
+            self.textbox.insert("end", f"{self.count}\n")
+            self.textbox.yview("end")
+            # print(count)
+        if self.count == self.number_of_images_you_want:
+            self.withdraw()
+            sys.exit()
+        self.count += 1
 
 
-app.mainloop()
+# app.mainloop()
 
 # def b():
 
