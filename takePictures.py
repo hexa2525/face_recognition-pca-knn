@@ -29,8 +29,7 @@ class TakePictures(customtkinter.CTkToplevel):
             "border_width": 2,
             "hover": "disable",
             "corner_radius": 5,
-            "width": 200,
-            "font": ("Poppins",18)
+            "width": 20,
 
         }
 
@@ -42,6 +41,7 @@ class TakePictures(customtkinter.CTkToplevel):
 
 
         takePictureButton = customtkinter.CTkButton(master=self, text="Take Picture", **button_properties,
+        font=("Poppins",18),
         command=takePictureButtonCallback)
 
         self.textbox = customtkinter.CTkTextbox(self,activate_scrollbars=False, 
@@ -50,13 +50,18 @@ class TakePictures(customtkinter.CTkToplevel):
         self.textbox.insert("0.0", "0\n")  
         self.textbox.pack(pady=20)
 
+        entry_frame = customtkinter.CTkFrame(master=self)
+        entry_frame.pack(pady=10)
 
-        entry_1 = customtkinter.CTkEntry(master=self, placeholder_text="Enter your name")
-        entry_1.pack(pady=10)
+        entry_1 = customtkinter.CTkEntry(master=entry_frame, placeholder_text="Enter your name",
+        corner_radius=0
+        )
+        entry_1.grid(row=1,column=1)
 
-        okButton = customtkinter.CTkButton(master=self, text="ok", **button_properties,
+
+        okButton = customtkinter.CTkButton(master=entry_frame, text="ok",width=20,corner_radius=0,
         command=takePictureButtonCallback)
-        okButton.grid()
+        okButton.grid(row=1,column=2)
 
         takePictureButton.pack()
 
