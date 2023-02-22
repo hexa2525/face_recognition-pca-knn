@@ -5,6 +5,7 @@ from data import LoadData
 import pickle as pk
 from face_detect import getDataFromCamera
 import cv2
+import json
 
 
 def knn(neighbor, traindata, trainlabel, testdata):
@@ -16,13 +17,12 @@ def knn(neighbor, traindata, trainlabel, testdata):
 IMAGE_SIZE = 224
 color = (0, 255, 0)
 
-users = [
-    "",
-    "ye zar ni ko",
-    "thet nyein chan lwin",
-    "aung htet oo"
-]
+with open("persons_data.json", "r") as persons_data:
+    p_data = json.load(persons_data)
+    p_data = list(p_data.values())
+    p_data.insert(0, "")
 
+users = p_data
 
 Data, Label = LoadData()
 Data = np.asarray(Data)
