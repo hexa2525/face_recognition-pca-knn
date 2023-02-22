@@ -24,9 +24,8 @@ class TakePictures(customtkinter.CTkToplevel):
     def __init__(self, root):
 
         self.count = 0
-        self.info_data = {}
         self.name = ""
-        self.number_of_images_you_want = 30
+        self.number_of_images_you_want = 300
 
         super().__init__()
         self.root = root
@@ -67,16 +66,21 @@ class TakePictures(customtkinter.CTkToplevel):
                 else:
                     sys.exit()
 
-            with open("persons_data.json", "r") as persons_data:
-                p_data = json.load(persons_data)
-            self.info_data["name"] = self.name
-            self.info_data["id"] = personID
-            if(len(p_data)>1):
-                p_data.append(self.info_data)
-            print(p_data)
-            # print(self.info_data)
-            # self.t1.start()
+
+            if personID == 1:
+                with open("persons_data.json", "w") as persons_data:
+                    persons_data.write("{}")
+
+            with open("persons_data.json", "r") as persons_data_r:
+                p_data = json.load(persons_data_r)
+                p_data[f"s{personID}"] = self.name
+            
+            with open("persons_data.json", "w") as persons_data_w:
+                persons_data_w.write(json.dumps(p_data, indent=4))
+
+            self.t1.start()
             takePictureButton.pack_forget()
+
         takePictureButton = customtkinter.CTkButton(master=self, text="Take Picture", **button_properties,
         font=("Poppins",18),command=takePictureButtonCallback)
 
