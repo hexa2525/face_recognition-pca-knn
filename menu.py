@@ -27,7 +27,7 @@ class Menu(customtkinter.CTkToplevel):
     self.protocol("WM_DELETE_WINDOW", lambda: root.destroy())
 
 
-    img = Image.open("menu_icon.png")
+    img = Image.open("./assets/menu_icon.png")
     img = customtkinter.CTkImage(light_image=img, size=(200,220))
 
     icon_img = customtkinter.CTkLabel(self, text="", image=img)

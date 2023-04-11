@@ -3,7 +3,6 @@ from PIL import Image
 import os
 
 IMAGE_SIZE = 224
-HOME = os.environ["HOME"]
 current_dir = os.getcwd()
 numberOfImages = 300
 
